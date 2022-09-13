@@ -55,7 +55,8 @@ while running:
 
 	favapps: list[App] = []
 	for i in range(3):
-		favapps.append(App((i * (APPSIZE + 20) + APPOFFSET[0], 20), topapps[i].color))
+		if appcount[topapps[i]] > 0:
+			favapps.append(App((i * (APPSIZE + 20) + APPOFFSET[0], 20), topapps[i].color))
 
 	# draw:
 	screen.fill((48, 52, 70))
