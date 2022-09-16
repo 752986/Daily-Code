@@ -43,13 +43,17 @@ def wordform(number: Union[float, int]) -> str:
     output = ""
 
     string = str(round(number, 2))
-    print(string)
     whole = string.split(".")[0]
 
     if whole == "0":
         output += "zero "
     else:
-        for i, place in enumerate(whole[0:len(whole):3]):
+        for i in range(math.ceil(len(whole) / 3)):
+            start = 0 if len(whole) < 3 else (len(whole)%3)+(i*3)
+            end = min(len(whole)-1,(len(whole)%3)+(i*3)+2)
+            place = whole[start:end]
+            #print(start, end)
+            print(int(place))
             power = places[math.floor(len(whole) / 3) - i]
             amount = _wordform_threedigit(int(place)) + power
             output += amount
@@ -62,7 +66,7 @@ def wordform(number: Union[float, int]) -> str:
             fractional += "0"
         if fractional[0] == "0":
             fractional = fractional[1]
-        output += " and {} / 100 ".format(fractional)
+        output += "and {} / 100 ".format(fractional)
 
     output += "dollars"
 
