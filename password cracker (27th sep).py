@@ -1,8 +1,5 @@
 import string
-import itertools
 import time
-
-password = input("enter a 4 character password to find! \n> ")
 
 # def crackany(search: str, max_depth: int = 4, n_chars = 1):
 #     if n_chars > max_depth:
@@ -18,7 +15,7 @@ password = input("enter a 4 character password to find! \n> ")
 #     return crackany(search, max_depth, n_chars + 1)
 
 def crack(search: str, length: int) -> str | None:
-    # this code was moslty stolen from kyle (thanks) ↓↓↓
+    # this code was mostly stolen from kyle (thanks, kyle)
     chars = [ord(c) for c in search]
     check = [ord(" ") for _ in range(length)]
 
@@ -33,7 +30,7 @@ def crack(search: str, length: int) -> str | None:
 
         for i in range(length):
             if check[i] > 126: # this index is past the range of useful ascii values:
-                check[i] = 0
+                check[i] = ord(" ")
                 check[i + 1] += 1
                 
 def crackany(search: str, max_length: int = 4):
@@ -42,9 +39,14 @@ def crackany(search: str, max_length: int = 4):
         if result != None:
             return result
 
+while True:
+    password = input("enter a password to find! (`exit` to quit) \n> ")
 
-starttime = time.process_time()
+    if password == "exit":
+        break
 
-print(crack(password, len(password)))
+    starttime = time.process_time()
 
-print("(took {} seconds)".format(time.process_time() - starttime))
+    print(crack(password, len(password)))
+
+    print("(took {} seconds)".format(time.process_time() - starttime))

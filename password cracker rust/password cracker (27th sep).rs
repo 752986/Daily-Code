@@ -1,3 +1,0 @@
-fn crack() {
-    println!("aaa");
-}
