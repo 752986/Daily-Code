@@ -52,27 +52,27 @@ fn crack(search: &String, length: usize) -> Option<String> {
 }
 
 // This function attempts to be faster by using fixed-size arrays, but it currently has a weird bug where it refuses to return `None` if it doesn't find the value. That may be caused by the provided length being longer than the string it's searching for?
-fn crack_static<const length: usize>(search: &String) -> Option<String> {
-    let chars = search.as_bytes();
-    let check = &mut [32; length]; // start with space, the lowest ascii value we care to check 
+// fn crack_static<const length: usize>(search: &String) -> Option<String> {
+//     let chars = search.as_bytes();
+//     let check = &mut [32; length]; // start with space, the lowest ascii value we care to check 
 
-    loop {
-        if chars == check {
-            return Some(String::from_utf8(check.to_vec()).expect(""));
-        }
+//     loop {
+//         if chars == check {
+//             return Some(String::from_utf8(check.to_vec()).expect(""));
+//         }
 
-        check[0] += 1;
+//         check[0] += 1;
 
-        if check[length-1] > 126 {
-            println!("aaa");
-            return None;
-        }
+//         if check[length-1] > 126 {
+//             println!("aaa");
+//             return None;
+//         }
 
-        for i in 0..length {
-            if check[i] > 126 {
-                check[i] = 32;
-                check[i + 1] += 1;
-            }
-        }
-    }
-}
+//         for i in 0..length {
+//             if check[i] > 126 {
+//                 check[i] = 32;
+//                 check[i + 1] += 1;
+//             }
+//         }
+//     }
+// }
