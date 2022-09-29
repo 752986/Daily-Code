@@ -1,3 +1,4 @@
+import random
 import pygame
 from pygame import mouse
 from pygame.rect import Rect
@@ -55,7 +56,10 @@ class Target(GameObject):
 # Game setup:
 clock = pygame.time.Clock()
 objects :list[GameObject] = []
-objects.append(Target((100, 100), Target.BLUE))
+for x in [100, 900]:
+	colorlist = random.shuffle([Target.RED, Target.YELLOW, Target.GREEN, Target.BLUE])
+	for y in [100, 300, 500, 700]:
+		objects.append(Target((x, y), colorlist.pop()))
 
 startpoint :Vector2 | None = None
 startcolor :int | None
@@ -83,6 +87,7 @@ while running:
 
 		if just_pressed and type(o) is Target and o.bounds.collidepoint(mouse.get_pos()):
 			startpoint = Vector2(mouse.get_pos())
+			startcolor = o.colorname
 
 	# Draw:
 	screen.fill(Color(20, 20, 20))
@@ -90,6 +95,6 @@ while running:
 		o.draw(screen)
 
 	if startpoint != None:
-		pygame.draw.line(screen, Color(255, 255, 255), startpoint, mouse.get_pos(), 4)
+		pygame.draw.line(screen, Target.COLORS[startcolor], startpoint, mouse.get_pos(), 4)
 	
 	pygame.display.flip()
