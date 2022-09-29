@@ -172,7 +172,8 @@ def MonsterGen():
 # use monstergen to make the others
 for i in range(20):
     MonsterGen()
-monsterlist.append(Hand())
+hand = Hand()
+monsterlist.append(hand)
 
 # creates game screen and caption
 
@@ -221,6 +222,8 @@ while not doExit:
     # draw all the monsters in the list
     for i in range(len(monsterlist)):
         monsterlist[i].draw()
+    # draw the cursor on top:
+    hand.draw()
 
     pygame.display.flip()  # update graphics each game loop
 
