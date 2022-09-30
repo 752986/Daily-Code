@@ -13,7 +13,7 @@ N_TARGETS = 4
 
 MAX_TIME = 5
 
-END_DELAY = 5
+END_DELAY = 3
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -105,7 +105,7 @@ while running:
 	clock.tick(75)
 	elapsed = (pygame.time.get_ticks() - start_time) / 1000
 	if game_over == None:
-		text = str(round(elapsed, 1))
+		text = str(round(MAX_TIME - elapsed, 1))
 
 	# Input:
 	just_pressed = False
@@ -138,10 +138,10 @@ while running:
 			
 		if complete: # game is won
 			text = "You won! (time: {}s)".format(round(elapsed, 1))
-			game_over = END_DELAY
+			game_over = float(END_DELAY)
 		elif elapsed > MAX_TIME: # game is lost
 			text = "You lost. Better luck next time?"
-			game_over = END_DELAY
+			game_over = float(END_DELAY)
 	else:
 		assert type(game_over) is float
 
