@@ -95,6 +95,7 @@ start_time = pygame.time.get_ticks()
 
 game_font = pygame.font.SysFont("consolas", 64)
 text = ""
+game_over_text = ""
 
 
 # Main loop:
@@ -127,9 +128,14 @@ while running:
 				if just_pressed:
 					start_point = Vector2(o.bounds.center)
 					start_color = o.colorname
-				elif just_released and start_point != None and o.colorname == start_color and start_point != Vector2(o.bounds.center):
+				elif just_released and start_point != None and start_point != Vector2(o.bounds.center):
+					if o.colorname == start_color:
 						objects.append(Wire((start_point.x, start_point.y), (o.bounds.centerx, o.bounds.centery), Target.COLORS[start_color].lerp((0, 0, 0), 0.2), 16))
 						wires_completed[o.colorname] = True
+					else: # game is lost to mistake
+						game_over_text = "You lost (mistake)."
+						text = "Better luck next time?"
+						game_over = END_DELAY
 
 		complete = True
 		for c in wires_completed:
@@ -137,13 +143,14 @@ while running:
 				complete = False
 			
 		if complete: # game is won
-			text = "You won! (time: {}s)".format(round(elapsed, 1))
-			game_over = float(END_DELAY)
-		elif elapsed > MAX_TIME: # game is lost
-			text = "You lost. Better luck next time?"
-			game_over = float(END_DELAY)
+			game_over_text = "You won!"
+			game_over = END_DELAY
+		elif elapsed > MAX_TIME: # game is lost to time
+			game_over_text = "You lost (timer)."
+			text = "Better luck next time?"
+			game_over = END_DELAY
 	else:
-		assert type(game_over) is float
+		assert type(game_over) is float or type(game_over) is int
 
 		game_over -= clock.get_time() / 1000
 		if game_over <= 0:
@@ -158,7 +165,9 @@ while running:
 		pygame.draw.line(screen, Target.COLORS[start_color].lerp((255, 255, 255), 0.2), start_point, mouse.get_pos(), 16)
 
 	display_text = game_font.render(text, True, Color(255, 255, 255))
-	screen.blit(display_text, ((WIDTH / 2) - (display_text.get_rect().width / 2), HEIGHT - 100))
+	screen.blit(display_text, ((WIDTH / 2) - (display_text.get_rect().width / 2), HEIGHT - 120))
+	display_text = game_font.render(game_over_text, True, Color(255, 255, 255))
+	screen.blit(display_text, ((WIDTH / 2) - (display_text.get_rect().width / 2), 56))
 
 	pygame.display.flip()
 
