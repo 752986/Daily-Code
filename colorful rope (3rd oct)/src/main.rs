@@ -2,17 +2,18 @@ struct Solution {}
 
 impl Solution {
 	pub fn min_cost(colors: String, needed_time: Vec<i32>) -> i32 {
+		let mut chars = colors.chars().collect::<Vec<char>>();
 		let mut cost = 0;
-		let zipped = colors.chars().zip(needed_time).collect::<Vec<(char, i32)>>();
-		let mut prev = zipped[0];
-		for i in 1..zipped.len() {
-			let curr = zipped[i];
-			if i == 0 {
-				continue;
-			} else if curr.0 == prev.0 {
-				cost += prev.1.min(curr.1);
+		loop {
+			let mut zipped = chars.iter().zip(&needed_time);
+			let mut prev = zipped.next().unwrap();
+			for (i, curr) in zipped.enumerate() {
+				if curr.0 == prev.0 {
+					if curr.1 < prev.1 {
+						zipped.remove(i);
+					}
+				}
 			}
-			prev = curr;
 		}
 		return cost;
 	}
