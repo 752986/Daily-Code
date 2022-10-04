@@ -1,5 +1,3 @@
-use std::ops::Index;
-
 struct Solution {}
 
 impl Solution {
@@ -7,25 +5,22 @@ impl Solution {
 		// part 1: find the lengths of each span of chars
 		let mut cost = 0;
 		let mut chars = colors.chars();
-		let mut ranges = Vec::new();
-		ranges.push((chars.next().unwrap(), 1));
-		for c in chars {
-			if c != ranges.last().unwrap().0 {
-				ranges.push((c, 1));
-			} else {
-				ranges.last_mut().unwrap().1 += 1;
+		let mut costs = needed_time.iter();
+		
+		for i in 0.. {
+			let prev_char = chars.next().unwrap();
+			let mut current_cost = 0;
+			let mut max_cost = costs.next().unwrap();
+			while prev_char == chars.next().unwrap() {
+				let char_cost = costs.next().unwrap();
+				current_cost += char_cost;
+				if char_cost > max_cost {
+					max_cost = char_cost;
+				}
 			}
+			cost += current_cost - max_cost;
 		}
 		
-		// part 2: remove all but the max cost values in each range
-		let mut offset = 0;
-		for r in ranges {
-			let slice = &needed_time[offset..(offset + r.1)];
-			let max = slice.iter().max().unwrap();
-			cost += slice.iter().sum::<i32>() - max;
-
-			offset += r.1;
-		}
 		return cost
 	}
 }
