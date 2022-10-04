@@ -1,3 +1,5 @@
+// https://leetcode.com/problems/minimum-time-to-make-rope-colorful
+
 struct Solution {}
 
 impl Solution {
@@ -7,6 +9,19 @@ impl Solution {
 		let mut chars = colors.chars();
 		let mut costs = needed_time.iter();
 		
+		/*
+		loop {
+			max = current.cost
+			while current.value == next.value {
+				if current.cost > max.cost {
+					max.value = current.value
+				}
+				block_cost += current.cost
+			}
+			cost += block_cost - max
+		}
+		*/
+
 		for i in 0.. {
 			let prev_char = chars.next().unwrap();
 			let mut current_cost = 0;
