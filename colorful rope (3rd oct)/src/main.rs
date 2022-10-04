@@ -22,15 +22,7 @@ impl Solution {
 		for r in ranges {
 			let slice = &needed_time[offset..(offset + r.1)];
 			let max = slice.iter().max().unwrap();
-			let mut skipped = false;
-			for t in slice.iter() {
-				if !skipped && t == max {
-					skipped = true;
-					continue
-				} else {
-					cost += t;
-				}
-			}
+			cost += slice.iter().sum::<i32>() - max;
 
 			offset += r.1;
 		}
