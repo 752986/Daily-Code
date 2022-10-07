@@ -1,5 +1,3 @@
-use std::ops::Index;
-
 struct Solution {}
 
 impl Solution {
