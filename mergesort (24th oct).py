@@ -27,7 +27,7 @@ def mergesort(to_sort: list[float]) -> list[float]:
 
 	return result
 
-test: list[float] = [random.randint(0, 10000) for _ in range(100_000_000)]
+test: list[float] = [random.randint(0, 10000) for _ in range(1_000_000)]
 
 start = time.perf_counter()
 result = mergesort(test)
