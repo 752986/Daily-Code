@@ -1,5 +1,6 @@
 from typing import Callable, Generic, TypeVar
 
+
 T = TypeVar("T")
 
 class ListNode(Generic[T]):
@@ -66,6 +67,24 @@ class LinkedList(Generic[T]):
 			raise IndexError
 		return current.value
 
+	def __len__(self):
+		index = 0
+		current = self.head
+		while current:
+			index += 1
+			current = current.next
+		return index
+
+	def remove(self, index: int):
+		current = self.head
+		for i in range(index - 1):
+			if current == None:
+				raise IndexError
+			current = current.next
+		if current == None or current.next == None:
+			raise IndexError
+		current.next = current.next.next
+	
 
 class Student:
 	def __init__(self, name: str, id: int):
@@ -78,6 +97,5 @@ class Student:
 
 students = LinkedList(Student("Lily", 889681))
 students.insert(Student("Declan", 752986))
-students.insert(5) # if your code editor is good, this line should be an error, since `students` is specifically a list of Students, so it can't hold an int.
 
-print(students)
+print(len(students))
