@@ -16,9 +16,11 @@ class TrainCar:
 	def __init__(self, is_full: bool = False) -> None:
 		self.car_id = random.randint(100, 999)
 		self.is_full = is_full
+		self.front = None
+		self.back = None
 
 	def __str__(self) -> str:
-		return "{} ID {}, {}full".format(str(type(self)).split("'")[1], self.car_id, "" if self.is_full else "not ")
+		return "Train car with ID {} ({}full)".format(str(type(self)).split("'")[1], self.car_id, "" if self.is_full else "not ")
 
 class Locomotive(TrainCar):
 	horn_frequency: int # maybe should eb float depending on pygame sound
@@ -32,12 +34,18 @@ class Locomotive(TrainCar):
 	def beep(self):
 		winsound.Beep(self.horn_frequency, int(self.horn_duration * 1000))
 
+	def __str__(self) -> str:
+		return "Locomotive with ID {} ({}full)".format(self.car_id, "" if self.is_full else "not ")
+
 class CargoCar(TrainCar):
 	car_type: Literal["coal", "oil", "automobile", "shipping"]
 
 	def __init__(self, car_type: Literal["coal", "oil", "automobile", "shipping"], is_full: bool = False) -> None:
 		super().__init__(is_full)
 		self.car_type = car_type
+
+	def __str__(self) -> str:
+		return "{} cargo car carrying with ID {} ({}full)".format(self.car_type, self.car_id, "" if self.is_full else "not ")
 
 
 class Train:
@@ -113,6 +121,9 @@ def create_train() -> Train:
 
 train = create_train()
 
+print("\n\x1b[35mTrain simulator 2020!!!!\x1b[0m")
+print("valid commands: \n  add\n  print \n  search_id <id> \n  count_cargo <type> \n  honk \n")
+
 while True:
 	user_in = input("> ").lower().split(" ")
 	command = user_in[0]
@@ -133,7 +144,9 @@ while True:
 
 		if command == "search_id":
 			index = train.find(lambda car: car.car_id == int(arg))
-			assert index != None
+			if index == None:
+				print("ID not found")
+				continue
 			car = train[index]
 			print(car)
 		elif command == "count_cargo":
