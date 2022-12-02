@@ -7,24 +7,6 @@ def colored_text(text: str, color: int):
     return "\x1b[3{}m".format(color) + text + "\x1b[0m"
 
 
-ITEM_NAMES: list[str] = [
-    "burger",
-    "pizza",
-    "glass bottle",
-    "magic stick",
-    "snake friend",
-    "health potion",
-    "cool glasses",
-    "coin",
-    "the color blue",
-    "cursed amulet",
-    "blessed amulet",
-    "glowing gemstone",
-    "hacking device",
-    "neat hat",
-]
-
-
 class Item:
     def __init__(self, name: str, price: int, quantity: int):
         self.name = name
@@ -39,8 +21,23 @@ class Player:
 
 class Shop:
     def __init__(self):
-        temp_names = ITEM_NAMES.copy()
-        self.items: list[Item] = [Item(temp_names.pop(random.randint(0, len(temp_names) - 1)), random.randint(1, 30), random.randint(1, 15)) for _ in range(random.randint(5, 15))]
+        names: list[str] = [
+    		"burger",
+		    "pizza",
+		    "glass bottle",
+		    "magic stick",
+		    "snake friend",
+		    "health potion",
+		    "cool glasses",
+		    "a few coins",
+		    "the color blue",
+		    "cursed amulet",
+		    "blessed amulet",
+		    "glowing gemstone",
+		    "hacking device",
+		    "neat hat",
+		]
+        self.items: list[Item] = [Item(names.pop(random.randint(0, len(names) - 1)), random.randint(1, 30), random.randint(1, 15)) for _ in range(random.randint(5, 10))]
 
     def shop(self, player: Player, intro: bool = True) -> bool:
         print(colored_text("\n" + ("-" * 20), 0))
@@ -57,6 +54,13 @@ class Shop:
             return True
 
         print()
+
+        if choice in ["i", "inventory", "items"]:
+            print("you have " + colored_text("{} coins", 3).format(player.money))
+            for item in player.inventory:
+                print(item.name + colored_text(" ({})".format(item.quantity), 0))
+            return False
+
 
         item_to_buy: Item
         for item in self.items:
@@ -78,6 +82,8 @@ class Shop:
             print(random.choice(["thanks for your purchase!", "enjoy your {}!".format(item_to_buy.name), "pleasure doing business with ya'!"]))
             player.money -= item_to_buy.price
             item_to_buy.quantity -= 1
+            if item_to_buy.name == "a few coins":
+                player.money += 2
             for item in player.inventory:
                 if item.name == item_to_buy.name:
                     item.quantity += 1
@@ -88,15 +94,15 @@ class Shop:
         return False
 
 
-
-s = Shop()
-p = Player(random.randint(20, 100))
-
-print("\n(`i` to view your inventory, `exit` to quit)")
-first_run = True
-
-while True:
-    if s.shop(p, first_run): # will return true if the player wants to exit
-        break
-
-    first_run = False
+if __name__ == "__main__":
+	s = Shop()
+	p = Player(random.randint(20, 100))
+	
+	print("\n(`i` to view your inventory, `exit` to quit)")
+	first_run = True
+	
+	while True:
+	    if s.shop(p, first_run): # will return true if the player wants to exit
+	        break
+	
+	    first_run = False
