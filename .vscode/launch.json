@@ -1,19 +1,10 @@
 {
-    "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": true
-        },
-        {
-            "name": "C/C++: g++.exe build and debug SFML file",
+            "name": "C/C++: g++.exe build and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/builds/${fileBasenameNoExtension}.exe",
+            "program": "${fileDirname}/${fileBasenameNoExtension}.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "C:/TDM-GCC-64/bin",
@@ -33,7 +24,8 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "C/C++: g++.exe build SFML file",
+            "preLaunchTask": "C/C++: g++.exe build active file"
         }
-    ]
+    ],
+    "version": "2.0.0"
 }
