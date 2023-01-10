@@ -24,8 +24,7 @@ void bubbleSort(vector<T> &list) {
     } while (swapped);
 }
 
-int main()
-{
+int main() {
     int length = 50000;
     auto a = vector<int>();
     a.reserve(100);
