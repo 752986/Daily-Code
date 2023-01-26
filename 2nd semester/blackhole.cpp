@@ -1,5 +1,6 @@
 #include <iostream>
 using namespace std;
+
 const double c = 2.998e8;
 const double G = 6.674e-11;
 
@@ -15,6 +16,5 @@ int main() {
 
         double result = radius(mass);
         cout << result << endl;
-        
     }
 }
