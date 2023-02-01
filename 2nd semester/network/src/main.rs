@@ -1,7 +1,10 @@
-use std::{net::{TcpListener, TcpStream, Shutdown}, io::{Write, Read, read_to_string, BufReader, BufRead}};
+use std::{
+    io::{read_to_string, BufRead, BufReader, Read, Write},
+    net::{Shutdown, TcpListener, TcpStream},
+};
 
 fn main() {
-    let listener: TcpListener = TcpListener::bind("10.17.68.53:42069").expect("unable to bind listener");
+    let listener: TcpListener = TcpListener::bind("0.0.0.0:42069").expect("unable to bind listener");
 
     loop {
         match listener.accept() {
@@ -9,18 +12,18 @@ fn main() {
                 println!("accepted incoming connection from {ip}");
                 client.write_all(b"hello from declan!").unwrap();
                 let mut reader = BufReader::new(&client);
-                let mut response = String::new();
                 loop {
+                    let mut response = String::new();
                     match reader.read_line(&mut response) {
                         Ok(0) | Err(_) => break,
-                        Ok(_) => println!("{}", response)
+                        Ok(_) => print!("{}", &response),
                     }
                 }
-            },
+                println!("disconnected from {ip}");
+            }
             Err(ip) => {
                 println!("unable to connect to client at {ip}");
             }
         }
     }
-
 }
