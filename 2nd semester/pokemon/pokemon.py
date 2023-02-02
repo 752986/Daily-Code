@@ -3,11 +3,14 @@ import random
 import time
 
 class Pokemon:
+    '''Stores data imported from the `pokemon.csv` file'''
+
     level: int
     hp: int
     data: dict[str, str]
 
     def __init__(self, name: str, level: int):
+        # find the correct pokemon in `pokemon.csv`
         with open("pokemon.csv", newline="") as file:
             reader = csv.DictReader(file)
             for row in reader:
@@ -19,17 +22,22 @@ class Pokemon:
             raise NameError("Could not find a gen 1 pokemon with that name!")
 
 class Move:
+    '''Stores data about a battle move'''
+
     name: str
     power: int
     kind: str
 
     def __init__(self):
         with open("pokemoves.csv", newline="") as file:
+            # read a random move from `pokemoves.csv`
             reader = csv.DictReader(file)
 
+            # choose a random index to pull from
             n_lines = 166
-            chosen_move: int = random.randint(0, n_lines - 1)
+            chosen_move: int = random.randint(0, n_lines - 2)
 
+            # go to that index and fill the instance's fields
             rows_seen = 0
             for row in reader:
                 if rows_seen == chosen_move:
@@ -42,6 +50,8 @@ class Move:
                 
 
 def affinity(attacker: str, defender: str) -> float:
+    '''Finds the type-based attack multiplier for the given attacking and defending types'''
+
     if attacker == "" or defender == "":
         return 1.0
 
@@ -53,11 +63,15 @@ def affinity(attacker: str, defender: str) -> float:
         raise NameError("Could not find the attacking type!")
 
 def damage(defender: Pokemon, attacker: Pokemon, move: Move) -> int:
+    '''Finds the damage that `defender` takes when `attacker` attacks it with `move`'''
+
     if move.power == 0:
         return 0 
 
+    # decide whether a crit happened
     crit: bool = random.random() < float(attacker.data["Speed"]) / (255 * 2)
 
+    # calculate the type-based multiplier and print a message based on it
     overall_affinity = affinity(move.kind, defender.data["Type 1"]) * affinity(move.kind, defender.data["Type 2"])
 
     match overall_affinity:
@@ -71,6 +85,7 @@ def damage(defender: Pokemon, attacker: Pokemon, move: Move) -> int:
     if crit:
         print("A critical hit!")
 
+    # calculate the damage that was done
     result = (((2 * attacker.level * (2 if crit else 1) + 2) * move.power * int(attacker.data["Attack"]) / int(defender.data["Defense"])) / 50 + 2) * (1.5 if move.kind in [attacker.data["Type 1"], attacker.data["Type 2"]] else 1) * overall_affinity * random.uniform(0.85, 1.0)
 
     return int(result)
@@ -78,11 +93,12 @@ def damage(defender: Pokemon, attacker: Pokemon, move: Move) -> int:
 
 def main():
     print("Choose two pokemon to battle!")
-    # p1 = Pokemon(input("first pokemon's name: "), int(input("first pokemon's level: ")))
-    # p2 = Pokemon(input("second pokemon's name: "), int(input("second pokemon's level: ")))
-    p1 = Pokemon("pikachu", 100)
-    p2 = Pokemon("mewtwo", 40)
- 
+
+    # uncomment the following two lines to manually input the info instead
+    #p1 = Pokemon(input("first pokemon's name: "), int(input("first pokemon's level: ")))
+    #p2 = Pokemon(input("second pokemon's name: "), int(input("second pokemon's level: ")))
+    p1 = Pokemon("pikachu", 20)
+    p2 = Pokemon("eevee", 25)
 
     print("======\n")
 
@@ -90,14 +106,14 @@ def main():
         # reject moves that are likely too powerful for the level
         # roughly based on a linear regression of pikachu, bulbasaur, and charmander's movesets
         move1 = Move()
-        while move1.power > 2 * p1.level + 30 or move1.power < 1:
+        while move1.power > 2 * p1.level + 20 or move1.power < 1:
             move1 = Move()
 
         move2 = Move()
-        while move2.power > 2 * p2.level + 30 or move2.power < 1:
+        while move2.power > 2 * p2.level + 20 or move2.power < 1:
             move2 = Move()
 
-
+        # pokemon 1 attacks
         print(f"{p1.data['Name']} used {move1.name}!")
         dmg = damage(p2, p1, move1)
         print(f"-{dmg} HP")
@@ -107,12 +123,14 @@ def main():
 
         time.sleep(1)
 
+        # exit if one of the pokemon has fainted
         if p1.hp <= 0 or p2.hp <= 0:
             print()
             break
 
         print()
 
+        # pokemon 2 attacks
         print(f"{p2.data['Name']} used {move2.name}!")
         dmg = damage(p2, p1, move1)
         print(f"-{dmg} HP")
@@ -122,6 +140,7 @@ def main():
 
         time.sleep(1)
 
+        # exit if one of the pokemon has fainted
         if p1.hp <= 0 or p2.hp <= 0:
             print()
             break
